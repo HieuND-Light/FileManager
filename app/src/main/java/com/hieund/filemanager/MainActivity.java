@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -27,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     File currentPath;
     File currentDirectoryPath;
     List<ItemModel> items;
-    GridView listFiles;
+    ListView listFiles;
     ActionBar actionBar;
 
     Context _context;
@@ -116,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Add adapter
         ItemAdapter adapter = new ItemAdapter(items, this);
         listFiles.setAdapter(adapter);
     }
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
+        // Item selection Handle
         switch (item.getItemId()) {
             // Arrow back
             case android.R.id.home:
@@ -282,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
         pathHere.setText(path.getParentFile().getAbsolutePath());
 
         _context = this;
-        GridView _list = (GridView) customDialog.findViewById(R.id.copy_file_dialog_list);
+        @SuppressLint("WrongViewCast") ListView _list = (ListView) customDialog.findViewById(R.id.copy_file_dialog_list);
         currentDirectoryPath = path.getParentFile();
         List<ItemModel> _directories = new ArrayList<>();
 
@@ -293,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Add adapter
+
         ItemAdapter _adapter = new ItemAdapter(_directories, _context);
         _list.setAdapter(_adapter);
 
@@ -311,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                         for(File _file : _files) {
                             if(_file.isDirectory()) _directories.add(new ItemModel(_file.getName(), "directory", _file));
                         }
-                        // Add adapter
+
                         ItemAdapter _adapter = new ItemAdapter(_directories, _context);
                         _list.setAdapter(_adapter);
 
@@ -335,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
                     for(File _file : _files) {
                         if(_file.isDirectory()) _directories.add(new ItemModel(_file.getName(), "directory", _file));
                     }
-                    // Add adapter
+
                     ItemAdapter _adapter = new ItemAdapter(_directories, _context);
                     _list.setAdapter(_adapter);
 
@@ -478,7 +479,7 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .create()
                 .show();
-    }// showMyAlertDialog
+    }
 
     public boolean deleteDirectory(File path) {
         if(path.exists()) {
@@ -502,7 +503,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean copyFile(File src, File dst) {
         try (InputStream in = new FileInputStream(src)) {
             try (OutputStream out = new FileOutputStream(dst)) {
-                // Transfer bytes from in to out
+
                 byte[] buf = new byte[1024];
                 int len;
                 while ((len = in.read(buf)) > 0) {
